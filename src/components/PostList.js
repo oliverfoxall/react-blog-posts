@@ -1,0 +1,43 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import { fetchPostsAndUsers } from "../actions";
+import UserHeader from './UserHeader';
+
+class PostList extends React.Component {
+    componentDidMount() {
+        this.props.fetchPostsAndUsers();
+    }
+
+    renderList() {
+        return this.props.posts.map(post => {
+            return (
+              <article className='media' key={post.id}>
+                  <figure className='media-left'>
+                      <p className='image is-64x64'>
+                          <img src="https://via.placeholder.com/64" alt="Placeholder"/>
+                      </p>
+                  </figure>
+                  <div className='media-content'>
+                      <div className='content'>
+                          <h2>{post.title}</h2>
+                          <p>
+                              {post.body}
+                          </p>
+                          <UserHeader userId={post.userId}/>
+                      </div>
+                  </div>
+              </article>
+            );
+        })
+    }
+
+    render(){
+        return <div className='container'>{this.renderList()}</div>
+    }
+}
+
+const mapStateToProps = (state) => {
+  return { posts: state.posts };
+};
+
+export default connect(mapStateToProps, { fetchPostsAndUsers })(PostList);
